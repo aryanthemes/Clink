@@ -42,7 +42,7 @@ if( $clink_url != '' ):
 		
 		$clink_powered_by_text = get_option('clink_powered_by_text');
 		$clink_countdown_duration = get_option('clink_countdown_duration');
-		if( !$clink_countdown_duration or $clink_countdown_duration == '' ){
+		if( !is_numeric( $clink_countdown_duration ) or empty( $clink_countdown_duration ) ) {
 			$clink_countdown_duration = 10;
 		}
 		?>

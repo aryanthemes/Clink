@@ -19,7 +19,7 @@ if( !get_option('clink_countdown_duration') ){
 	add_option( 'clink_countdown_duration', $value = 10, $deprecated = '', $autoload = 'yes' );
 }
 
-
+ 
 /**
  * Add Clink menu to WordPress dashboard
  */
@@ -29,7 +29,8 @@ function clink_admin_menu() {
 		'edit.php?post_type=clink', 
 		__('Global Clink Settings','aryan-themes'),
 		__('Global Settings','aryan-themes') , 'manage_options', 
-        'clink-settings', 'clink_settings'
+        'clink-settings',
+		'clink_settings'
 	); 
 }
 add_action("admin_menu", "clink_admin_menu");
@@ -43,6 +44,7 @@ function clink_settings(){
 ?>
 	    <div class="wrap">
 			<h2><span class="clink-main-dashicons dashicons dashicons-admin-links"></span><?php _e('Global Clink Settings','aryan-themes'); ?></h2>
+			<?php settings_errors(); ?>
 			<form method="post" action="options.php">
 				<table class="form-table">
 					<tbody>
@@ -61,7 +63,27 @@ function clink_settings(){
 
 
 function display_clink_main_slug(){
+
+	// validate and update clink_main_slug value
+
 	$clink_main_slug_option = get_option('clink_main_slug');
+	if( $clink_main_slug_option ){
+		$clink_main_slug_option = str_replace(' ', '-', $clink_main_slug_option); // Replaces all spaces with hyphens.
+		$clink_main_slug_option = preg_replace('/[^A-Za-z0-9\-]/', '', $clink_main_slug_option); // Removes special chars.	
+		update_option( 'clink_main_slug', $value = $clink_main_slug_option );	
+		$clink_main_slug_option = get_option('clink_main_slug');
+	}elseif( empty($clink_main_slug_option ) ){
+		update_option( 'clink_main_slug', $value = 'clink' );
+		$clink_main_slug_option = get_option('clink_main_slug');
+	}
+	
+	// Flush rewrite rules after Clink settings update
+	
+	if( isset($_GET['settings-updated']) ){
+		flush_rewrite_rules();
+	}		
+	
+	
 	$clink_slug_structure = get_bloginfo('url') . '/' . $clink_main_slug_option . '/link-name';
 	?>
     	<input type="text" name="clink_main_slug" id="clink_main_slug" value="<?php echo $clink_main_slug_option; ?>" />
@@ -111,8 +133,17 @@ function display_clink_countdown_option(){
 
 
 function display_clink_countdown_duration(){
+	
+	// validate and update clink_countdown_duration value
+	
+	$clink_countdown_duration = get_option('clink_countdown_duration');
+	if( !is_numeric( $clink_countdown_duration ) ){
+		update_option( 'clink_countdown_duration', $value = 10 );	
+		$clink_countdown_duration = get_option('clink_countdown_duration');
+	}
+	
 	?>
-    	<input type="number" name="clink_countdown_duration" id="clink_countdown_duration" value="<?php echo get_option('clink_countdown_duration'); ?>" />
+    	<input type="number" name="clink_countdown_duration" id="clink_countdown_duration" value="<?php echo $clink_countdown_duration; ?>" />
 		<p class="description clink-description"><?php _e('Enter the redirect countdown duration in seconds (example : 20). In default it set to 10 (seconds).','aryan-themes'); ?></p>
 	<?php
 }
@@ -127,12 +158,11 @@ function display_clink_option_panel_fields(){
 	add_settings_field("clink_countdown_option", __('countdown','aryan-themes'), "display_clink_countdown_option", "clink-options", "general-section");
 	add_settings_field("clink_countdown_duration", __('countdown duration','aryan-themes'), "display_clink_countdown_duration", "clink-options", "general-section");	
 	
-	register_setting("general-section", "clink_main_slug");
-	register_setting("general-section", "clink_powered_by_text");
-	register_setting("general-section", "clink_countdown_option");
+	register_setting("general-section", "clink_main_slug" );
+	register_setting("general-section", "clink_powered_by_text" );
+	register_setting("general-section", "clink_countdown_option" );
 	register_setting("general-section", "clink_countdown_duration");
 	
-	flush_rewrite_rules();
 }
 add_action("admin_init", "display_clink_option_panel_fields");
 

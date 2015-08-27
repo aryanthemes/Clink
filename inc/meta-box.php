@@ -2,6 +2,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
+
 /**
  * Add Clink meta box's to the links edit screen.
  */
@@ -25,6 +26,7 @@ function clink_info_meta_box() {
 	);	
 }
 add_action( 'add_meta_boxes', 'clink_info_meta_box' );
+
 
 /**
  * Prints the box content.
@@ -56,7 +58,7 @@ function clink_link_info_callback( $post ) {
 	$post_id = $post->ID;
 	// Add a nonce field so we can check for it later.
 	wp_nonce_field( '_clink_link_info_nonce', 'clink_link_info' ); 
-	
+
 	
 	echo '<table class="form-table">';
 		echo '<tbody>';

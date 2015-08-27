@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
  
 function register_cpt_clink() {
 	$clink_main_slug = get_option('clink_main_slug');
-	if( !$clink_main_slug or $clink_main_slug == '' ){
+	if( empty( $clink_main_slug ) ){
 		$clink_main_slug = 'clink';
 	}
     $labels = array(

@@ -1,16 +1,18 @@
 <?php
-/**
- * Plugin Name: Clink - Countdown then Redirect
- * Plugin URI: http://aryanthemes.com
- * Description: Countdown then Redirect is a WordPress plugin to manage 301 redirections and count their visits. You can use a countdown before redirect to links.
- * Author: Aryan Themes
- * Author URI: http://aryanthemes.com/
- * Version: 1.0
- * Text Domain: aryan-themes
- * Domain Path: languages
- * tags: 301, affiliates, click tracking, custom post types, external-links, link manager, links, outbound links, pretty links, redirect, countdown, counter
- * License: GPLv2 or later
- */
+
+/*
+Plugin Name: Clink - Countdown then Redirect links
+Plugin URI:  http://aryanthemes.com
+Description: Countdown then Redirect is a WordPress plugin to manage 301 redirections and count their visits. You can use a countdown before redirect to links.
+Version:     1.1
+Author:      Aryan Themes
+Author URI:  http://aryanthemes.com
+License:     GPL2
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Domain Path: /languages 
+Text Domain: aryan-themes
+*/
+
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
@@ -63,10 +65,7 @@ function set_clink_single_template($single_template) {
 		function clink_scripts() {
 			global $wp_scripts;
 			$wp_scripts = '';
-			wp_deregister_script('jquery');
-			//wp_register_script('jquery', 'https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js', false, null);
-			//wp_enqueue_script('jquery');
-			wp_enqueue_script( 'jquery', CLINK_URL . 'assets/js/jquery.min.js' );
+			wp_enqueue_script('jquery');
 			wp_enqueue_script( 'countdown360', CLINK_URL . 'assets/js/jquery.countdown360.min.js' );
 			wp_enqueue_script( 'clink', CLINK_URL . 'assets/js/main.js' );
 		}	
